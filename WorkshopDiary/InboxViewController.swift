@@ -37,7 +37,7 @@ final class InboxViewController: UIViewController {
         return t
     }()
 
-    // MARK: Lifecyucle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 

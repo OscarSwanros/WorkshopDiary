@@ -13,6 +13,25 @@ private extension Selector {
     static let saveTapped = #selector(AddNoteViewController.saveTapped)
 }
 
+protocol AddNoteViewControllerDelegate: class {
+    /**
+     Notifies the view controller that the user has cancelled the operation.
+
+     - Parameters:
+        - viewController: The view controller that cancelled the operation.
+     */
+    func addNoteViewControllerDidCancel(_ viewController: AddNoteViewController)
+
+    /**
+     Notifies the view controller that the user has saved the information correctly.
+
+     - Parameters:
+        - viewController: The view controller that saved the entry.
+        - newEntry: The entry that was just saved to the store.
+     */
+    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: String)
+}
+
 final class AddNoteViewController: UIViewController {
 
     // MARK: Navigation
