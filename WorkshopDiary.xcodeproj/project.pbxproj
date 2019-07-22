@@ -12,6 +12,7 @@
 		2C764CEA22E60581003C5C19 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C764CE822E60581003C5C19 /* LaunchScreen.storyboard */; };
 		2C764CF222E60D54003C5C19 /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764CF122E60D54003C5C19 /* InboxViewController.swift */; };
 		2C764CF622E6152A003C5C19 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764CF522E6152A003C5C19 /* AddNoteViewController.swift */; };
+		2C764CF922E6246E003C5C19 /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764CF822E6246E003C5C19 /* DiaryEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		2C764CEB22E60581003C5C19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C764CF122E60D54003C5C19 /* InboxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxViewController.swift; sourceTree = "<group>"; };
 		2C764CF522E6152A003C5C19 /* AddNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
+		2C764CF822E6246E003C5C19 /* DiaryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +59,20 @@
 				2C764CDF22E60580003C5C19 /* AppDelegate.swift */,
 				2C764CF522E6152A003C5C19 /* AddNoteViewController.swift */,
 				2C764CF122E60D54003C5C19 /* InboxViewController.swift */,
+				2C764CF722E62464003C5C19 /* Models */,
 				2C764CE622E60581003C5C19 /* Assets.xcassets */,
 				2C764CE822E60581003C5C19 /* LaunchScreen.storyboard */,
 				2C764CEB22E60581003C5C19 /* Info.plist */,
 			);
 			path = WorkshopDiary;
+			sourceTree = "<group>";
+		};
+		2C764CF722E62464003C5C19 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2C764CF822E6246E003C5C19 /* DiaryEntry.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +147,7 @@
 			files = (
 				2C764CF222E60D54003C5C19 /* InboxViewController.swift in Sources */,
 				2C764CE022E60580003C5C19 /* AppDelegate.swift in Sources */,
+				2C764CF922E6246E003C5C19 /* DiaryEntry.swift in Sources */,
 				2C764CF622E6152A003C5C19 /* AddNoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
