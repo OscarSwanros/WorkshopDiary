@@ -12,13 +12,27 @@ private extension Selector {
     static let addNoteTapped = #selector(InboxViewController.addNoteTapped)
 }
 
-var store: [String] = [
-    "Had an excellent day!",
-    "Got some ice cream",
-    "Went to the beach and I'm feeling great!",
-    "Had a chat with my boss about my raise",
-    "Got engaged!"
+let dummyContent = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+"""
+
+var store: [DiaryEntry] = [
+    DiaryEntry(title: "Had an excellent day!", content: dummyContent),
+    DiaryEntry(title: "Got some ice cream", content: dummyContent),
+    DiaryEntry(title: "Went to the beach and I'm feeling great!", content: dummyContent),
+    DiaryEntry(title: "Had a chat with my boss about my raise", content: dummyContent),
+    DiaryEntry(title: "Got engaged!", content: dummyContent)
 ]
+
+final class DiaryCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+}
 
 final class InboxViewController: UIViewController {
     // MARK: Navigation
@@ -32,7 +46,7 @@ final class InboxViewController: UIViewController {
         t.dataSource = self
 
         t.translatesAutoresizingMaskIntoConstraints = false
-        t.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        t.register(DiaryCell.self, forCellReuseIdentifier: "Cell")
 
         return t
     }()
@@ -63,7 +77,10 @@ extension InboxViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = "\(store[indexPath.item])"
+
+        cell.textLabel?.text = "\(store[indexPath.item].title)"
+        cell.detailTextLabel?.text = "\(store[indexPath.item].content)"
+
         return cell
     }
 }
@@ -83,7 +100,7 @@ extension InboxViewController: AddNoteViewControllerDelegate {
         dismiss(animated: true, completion: nil)
     }
 
-    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: String) {
+    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: DiaryEntry) {
         // Dismiss the form.
         dismiss(animated: true, completion: nil)
 

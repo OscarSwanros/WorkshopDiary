@@ -29,7 +29,7 @@ protocol AddNoteViewControllerDelegate: class {
         - viewController: The view controller that saved the entry.
         - newEntry: The entry that was just saved to the store.
      */
-    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: String)
+    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: DiaryEntry)
 }
 
 final class AddNoteViewController: UIViewController {
@@ -132,6 +132,11 @@ extension AddNoteViewController {
 
     @objc
     fileprivate func saveTapped() {
-        delegate?.addNoteViewController(self, didAdd: self.noteTextView.text)
+        let entry = DiaryEntry(
+            title: titleTextField.text ?? "",
+            content: noteTextView.text
+        )
+
+        delegate?.addNoteViewController(self, didAdd: entry)
     }
 }
