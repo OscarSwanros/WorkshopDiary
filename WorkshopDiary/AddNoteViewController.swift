@@ -33,6 +33,8 @@ protocol AddNoteViewControllerDelegate: class {
 }
 
 final class AddNoteViewController: UIViewController {
+    /// The delegate that will react to events from this view controller.
+    weak var delegate: AddNoteViewControllerDelegate?
 
     // MARK: Navigation
     private lazy var cancelBarButtonItem: UIBarButtonItem = {
@@ -53,7 +55,7 @@ final class AddNoteViewController: UIViewController {
         return s
     }()
 
-    private lazy var titleTextField: UITextField = {
+    fileprivate lazy var titleTextField: UITextField = {
         let t = UITextField()
         t.placeholder = "Title"
         t.translatesAutoresizingMaskIntoConstraints =  false
@@ -61,7 +63,7 @@ final class AddNoteViewController: UIViewController {
         return t
     }()
 
-    private lazy var noteTextView: UITextView = {
+    fileprivate lazy var noteTextView: UITextView = {
         let t = UITextView()
 
         t.translatesAutoresizingMaskIntoConstraints = false
@@ -125,9 +127,11 @@ final class AddNoteViewController: UIViewController {
 extension AddNoteViewController {
     @objc
     fileprivate func cancelTapped() {
+        delegate?.addNoteViewControllerDidCancel(self)
     }
 
     @objc
     fileprivate func saveTapped() {
+        delegate?.addNoteViewController(self, didAdd: self.noteTextView.text)
     }
 }
