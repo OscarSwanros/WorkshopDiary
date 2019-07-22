@@ -12,7 +12,7 @@ private extension Selector {
     static let addNoteTapped = #selector(InboxViewController.addNoteTapped)
 }
 
-let store: [String] = [
+var store: [String] = [
     "Had an excellent day!",
     "Got some ice cream",
     "Went to the beach and I'm feeling great!",
@@ -72,7 +72,28 @@ extension InboxViewController {
     @objc
     fileprivate func addNoteTapped() {
         let addNoteViewController = AddNoteViewController()
+        addNoteViewController.delegate = self
         let nav = UINavigationController(rootViewController: addNoteViewController)
         present(nav, animated: true, completion: nil)
+    }
+}
+
+extension InboxViewController: AddNoteViewControllerDelegate {
+    func addNoteViewControllerDidCancel(_ viewController: AddNoteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: String) {
+        // Dismiss the form.
+        dismiss(animated: true, completion: nil)
+
+        // First insert the new entry to our store.
+        store.append(newEntry)
+
+        // Then fabricate the index path.
+        let indexPath = IndexPath(row: store.count - 1, section: 0)
+
+        // Insert the row on the table view.
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
 }
