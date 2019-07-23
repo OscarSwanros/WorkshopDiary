@@ -13,18 +13,6 @@ private extension Selector {
     static let addNoteTapped = #selector(InboxViewController.addNoteTapped)
 }
 
-let dummyContent = """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-"""
-
-var store: [DiaryEntry] = [
-    DiaryEntry(title: "Had an excellent day!", content: dummyContent),
-    DiaryEntry(title: "Got some ice cream", content: dummyContent),
-    DiaryEntry(title: "Went to the beach and I'm feeling great!", content: dummyContent),
-    DiaryEntry(title: "Had a chat with my boss about my raise", content: dummyContent),
-    DiaryEntry(title: "Got engaged!", content: dummyContent)
-]
-
 final class DiaryCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -36,6 +24,8 @@ final class DiaryCell: UITableViewCell {
 }
 
 final class InboxViewController: UIViewController {
+    private let dataClient = WKDataClient.shared
+
     // MARK: Navigation
     private lazy var addNoteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(title: "Add", style: .done, target: self, action: .addNoteTapped)
@@ -73,14 +63,14 @@ final class InboxViewController: UIViewController {
 // MARK: Table View Data Source
 extension InboxViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return store.count
+        return dataClient.entries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        cell.textLabel?.text = "\(store[indexPath.item].title)"
-        cell.detailTextLabel?.text = "\(store[indexPath.item].content)"
+        cell.textLabel?.text = "\(dataClient.entries[indexPath.item].title)"
+        cell.detailTextLabel?.text = "\(dataClient.entries[indexPath.item].content)"
 
         return cell
     }
@@ -106,10 +96,10 @@ extension InboxViewController: AddNoteViewControllerDelegate {
         dismiss(animated: true, completion: nil)
 
         // First insert the new entry to our store.
-        store.append(newEntry)
+        dataClient.entries.append(newEntry)
 
         // Then fabricate the index path.
-        let indexPath = IndexPath(row: store.count - 1, section: 0)
+        let indexPath = IndexPath(row: dataClient.entries.count - 1, section: 0)
 
         // Insert the row on the table view.
         tableView.insertRows(at: [indexPath], with: .automatic)
