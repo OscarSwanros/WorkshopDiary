@@ -6,7 +6,7 @@
 //  Copyright © 2019 Pacific3. All rights reserved.
 //
 
-struct FileDataSink: DataSink {
+class FileDataSink: DataSink {
     private let fileManager = FileManager()
 
     private lazy var file: URL = {
@@ -21,15 +21,25 @@ struct FileDataSink: DataSink {
     }()
 
     func write(entries: [DiaryEntry]) throws {
-        let jsons = entries.compactMap { (entry) -> Data? in
-            let jsonEncoder = JSONEncoder()
-            return try? jsonEncoder.encode(entry)
-        }
+        let collection = DiaryEntryCollection(entries: entries)
 
-        print(jsons)
+        let jsonEncoder = JSONEncoder()
+        let json = try jsonEncoder.encode(collection)
+
+        try json.write(to: file)
     }
 
     func read() -> [DiaryEntry] {
-        return []
+        let jsonDecoder = JSONDecoder()
+
+        guard
+            fileManager.fileExists(atPath: file.path),
+            let jsonData = try? Data(contentsOf: file),
+            let collection = try? jsonDecoder.decode(DiaryEntryCollection.self, from: jsonData)
+            else {
+                return []
+        }
+
+        return collection.entries
     }
 }

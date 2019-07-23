@@ -8,6 +8,12 @@
 
 import Foundation
 
+struct DiaryEntryCollection {
+    let entries: [DiaryEntry]
+}
+
+extension DiaryEntryCollection: Codable { }
+
 public struct DiaryEntry {
     public let title: String
     public let content: String

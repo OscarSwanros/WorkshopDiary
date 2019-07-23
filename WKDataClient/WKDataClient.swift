@@ -13,14 +13,19 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 public final class WKDataClient {
     public static let shared = WKDataClient()
 
-    public var entries: [DiaryEntry] = [
-        DiaryEntry(title: "Had an excellent day!", content: dummyContent),
-        DiaryEntry(title: "Got some ice cream", content: dummyContent),
-        DiaryEntry(title: "Went to the beach and I'm feeling great!", content: dummyContent),
-        DiaryEntry(title: "Had a chat with my boss about my raise", content: dummyContent),
-        DiaryEntry(title: "Got engaged!", content: dummyContent)
-        ] {
-        didSet {
+    private init() {
+        _entriesStore = self.sinks.last?.read() ?? []
+    }
+
+    private var _entriesStore: [DiaryEntry]
+    public var entries: [DiaryEntry] {
+        get {
+            return _entriesStore
+        }
+
+        set {
+            _entriesStore = newValue
+
             sync()
         }
     }
@@ -31,7 +36,7 @@ public final class WKDataClient {
 
     private func sync() {
         sinks.forEach { (dataSink) in
-            try? dataSink.write(entries: entries)
+            try? dataSink.write(entries: _entriesStore)
         }
     }
 }
