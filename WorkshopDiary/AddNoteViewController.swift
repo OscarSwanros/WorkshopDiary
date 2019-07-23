@@ -8,6 +8,7 @@
 
 import UIKit
 import WKDataClient
+import MapKit
 
 private extension Selector {
     static let cancelTapped = #selector(AddNoteViewController.cancelTapped)
@@ -33,9 +34,23 @@ protocol AddNoteViewControllerDelegate: class {
     func addNoteViewController(_ viewController: AddNoteViewController, didAdd newEntry: DiaryEntry)
 }
 
+private func format(date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEEE, MMM d, yyyy"
+
+    return formatter.string(from: date)
+}
+
 final class AddNoteViewController: UIViewController {
     /// The delegate that will react to events from this view controller.
     weak var delegate: AddNoteViewControllerDelegate?
+
+    private lazy var locationManager: CLLocationManager = {
+        let l = CLLocationManager()
+        l.delegate = self
+
+        return l
+    }()
 
     // MARK: Navigation
     private lazy var cancelBarButtonItem: UIBarButtonItem = {
@@ -77,16 +92,24 @@ final class AddNoteViewController: UIViewController {
         return t
     }()
 
+    private lazy var mapView: MKMapView = {
+        let m = MKMapView(frame: .zero)
+        m.translatesAutoresizingMaskIntoConstraints = false
+        m.heightAnchor.constraint(equalToConstant: 180).isActive = true
+
+        return m
+    }()
+
     private lazy var dateLabel: UILabel = {
         let l = UILabel(frame: .zero)
-        l.text = "Tuesday, Jul 22, 2019"
+        l.text = format(date: Date())
         l.textColor = UIColor.lightGray
         l.textAlignment = .center
         return l
     }()
 
     private lazy var stackView: UIStackView = {
-        let s = UIStackView(arrangedSubviews: [self.titleTextField, self.noteTextView, self.dateLabel])
+        let s = UIStackView(arrangedSubviews: [self.titleTextField, self.noteTextView, self.mapView, self.dateLabel])
         s.translatesAutoresizingMaskIntoConstraints = false
         s.axis = .vertical
         s.spacing = 20
@@ -121,6 +144,19 @@ final class AddNoteViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
             ])
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Request location permission
+        locationManager.requestWhenInUseAuthorization()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        locationManager.stopUpdatingLocation()
+    }
 }
 
 
@@ -135,9 +171,30 @@ extension AddNoteViewController {
     fileprivate func saveTapped() {
         let entry = DiaryEntry(
             title: titleTextField.text ?? "",
-            content: noteTextView.text
+            content: noteTextView.text,
+            coordinate: mapView.userLocation.coordinate
         )
 
         delegate?.addNoteViewController(self, didAdd: entry)
+    }
+}
+
+extension AddNoteViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+
+        if status == .authorizedWhenInUse {
+            self.mapView.showsUserLocation = true
+        }
+
+        manager.startUpdatingLocation()
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let firstLocation = locations.first else {
+            return
+        }
+
+        let region = MKCoordinateRegion(center: firstLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
     }
 }

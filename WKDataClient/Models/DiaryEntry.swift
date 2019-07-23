@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct DiaryEntryCollection {
     let entries: [DiaryEntry]
@@ -14,15 +15,28 @@ struct DiaryEntryCollection {
 
 extension DiaryEntryCollection: Codable { }
 
+public struct Coordinate {
+    public let latitude: Double
+    public let longitude: Double
+}
+
+extension Coordinate: Codable {}
+
 public struct DiaryEntry {
     public let title: String
     public let content: String
     public let timestamp: Date
+    public let coordinate: Coordinate
 
-    public init(title: String = "", content: String, timestamp: Date = Date()) {
+    public init(title: String = "", content: String, timestamp: Date = Date(), coordinate: CLLocationCoordinate2D) {
+        self.init(title: title, content: content, timestamp: timestamp, coordinate: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude))
+    }
+
+    public init(title: String = "", content: String, timestamp: Date = Date(), coordinate: Coordinate) {
         self.title = title
         self.content = content
         self.timestamp = timestamp
+        self.coordinate = coordinate
     }
 }
 
