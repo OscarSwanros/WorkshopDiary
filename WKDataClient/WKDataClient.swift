@@ -19,5 +19,19 @@ public final class WKDataClient {
         DiaryEntry(title: "Went to the beach and I'm feeling great!", content: dummyContent),
         DiaryEntry(title: "Had a chat with my boss about my raise", content: dummyContent),
         DiaryEntry(title: "Got engaged!", content: dummyContent)
+        ] {
+        didSet {
+            sync()
+        }
+    }
+
+    public var sinks: [DataSink] = [
+        FileDataSink()
     ]
+
+    private func sync() {
+        sinks.forEach { (dataSink) in
+            try? dataSink.write(entries: entries)
+        }
+    }
 }

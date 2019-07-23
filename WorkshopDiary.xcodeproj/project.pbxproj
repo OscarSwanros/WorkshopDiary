@@ -17,6 +17,8 @@
 		2C764D3A22E780CC003C5C19 /* WKDataClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C764D3222E780CC003C5C19 /* WKDataClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C764D3F22E780EF003C5C19 /* DiaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764CF822E6246E003C5C19 /* DiaryEntry.swift */; };
 		2C764D4122E78140003C5C19 /* WKDataClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764D4022E78140003C5C19 /* WKDataClient.swift */; };
+		2C764D4422E7827B003C5C19 /* FileDataSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764D4322E7827B003C5C19 /* FileDataSink.swift */; };
+		2C764D4622E78286003C5C19 /* DataSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C764D4522E78286003C5C19 /* DataSink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		2C764D3422E780CC003C5C19 /* WKDataClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKDataClient.h; sourceTree = "<group>"; };
 		2C764D3522E780CC003C5C19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C764D4022E78140003C5C19 /* WKDataClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKDataClient.swift; sourceTree = "<group>"; };
+		2C764D4322E7827B003C5C19 /* FileDataSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDataSink.swift; sourceTree = "<group>"; };
+		2C764D4522E78286003C5C19 /* DataSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSink.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,12 +123,22 @@
 		2C764D3322E780CC003C5C19 /* WKDataClient */ = {
 			isa = PBXGroup;
 			children = (
+				2C764D4222E78270003C5C19 /* Sinks */,
 				2C764CF722E62464003C5C19 /* Models */,
 				2C764D3422E780CC003C5C19 /* WKDataClient.h */,
 				2C764D3522E780CC003C5C19 /* Info.plist */,
 				2C764D4022E78140003C5C19 /* WKDataClient.swift */,
 			);
 			path = WKDataClient;
+			sourceTree = "<group>";
+		};
+		2C764D4222E78270003C5C19 /* Sinks */ = {
+			isa = PBXGroup;
+			children = (
+				2C764D4522E78286003C5C19 /* DataSink.swift */,
+				2C764D4322E7827B003C5C19 /* FileDataSink.swift */,
+			);
+			path = Sinks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,8 +263,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C764D4622E78286003C5C19 /* DataSink.swift in Sources */,
 				2C764D4122E78140003C5C19 /* WKDataClient.swift in Sources */,
 				2C764D3F22E780EF003C5C19 /* DiaryEntry.swift in Sources */,
+				2C764D4422E7827B003C5C19 /* FileDataSink.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
