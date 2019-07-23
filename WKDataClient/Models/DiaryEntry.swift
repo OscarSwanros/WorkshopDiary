@@ -19,3 +19,6 @@ public struct DiaryEntry {
         self.timestamp = timestamp
     }
 }
+
+extension DiaryEntry: Codable {
+}
