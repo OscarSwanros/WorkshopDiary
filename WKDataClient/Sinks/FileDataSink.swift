@@ -10,7 +10,7 @@ class FileDataSink: DataSink {
     private let fileManager = FileManager()
 
     private lazy var file: URL = {
-        guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, false).first as NSString? else {
+        guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first as NSString? else {
             fatalError("Couldn't load documents directory.")
         }
 
