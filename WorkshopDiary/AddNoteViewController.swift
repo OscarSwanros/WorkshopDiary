@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WKDataClient
 
 private extension Selector {
     static let cancelTapped = #selector(AddNoteViewController.cancelTapped)

@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct DiaryEntry {
-    let title: String
-    let content: String
-    let timestamp: Date
+public struct DiaryEntry {
+    public let title: String
+    public let content: String
+    public let timestamp: Date
 
-    init(title: String = "", content: String, timestamp: Date = Date()) {
+    public init(title: String = "", content: String, timestamp: Date = Date()) {
         self.title = title
         self.content = content
         self.timestamp = timestamp
