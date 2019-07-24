@@ -7,20 +7,25 @@
 //
 
 import UIKit
+import WKDataClient
 
 private extension Selector {
     static let addNoteTapped = #selector(InboxViewController.addNoteTapped)
 }
 
-let store: [String] = [
-    "Had an excellent day!",
-    "Got some ice cream",
-    "Went to the beach and I'm feeling great!",
-    "Had a chat with my boss about my raise",
-    "Got engaged!"
-]
+private class EntryCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 final class InboxViewController: UIViewController {
+    let dataClient = WKDataClient.shared
+
     // MARK: Navigation
     private lazy var addNoteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(title: "Add", style: .done, target: self, action: .addNoteTapped)
@@ -32,7 +37,7 @@ final class InboxViewController: UIViewController {
         t.dataSource = self
 
         t.translatesAutoresizingMaskIntoConstraints = false
-        t.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        t.register(EntryCell.self, forCellReuseIdentifier: "Cell")
 
         return t
     }()
@@ -58,12 +63,13 @@ final class InboxViewController: UIViewController {
 // MARK: Table View Data Source
 extension InboxViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return store.count
+        return dataClient.entries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = "\(store[indexPath.item])"
+        cell.textLabel?.text = "\(dataClient.entries[indexPath.item].title)"
+        cell.detailTextLabel?.text = "\(dataClient.entries[indexPath.item].content)"
         return cell
     }
 }
@@ -72,7 +78,23 @@ extension InboxViewController {
     @objc
     fileprivate func addNoteTapped() {
         let addNoteViewController = AddNoteViewController()
+        addNoteViewController.delegate = self
         let nav = UINavigationController(rootViewController: addNoteViewController)
         present(nav, animated: true, completion: nil)
+    }
+}
+
+extension InboxViewController: AddNoteViewControllerDelegate {
+    func addNoteViewControllerDidCancel(_ viewController: AddNoteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func addNoteViewController(_ viewController: AddNoteViewController, didAdd entry: DiaryEntry) {
+        dismiss(animated: true, completion: nil)
+
+        dataClient.entries.append(entry)
+
+        let newIndexPath = IndexPath(row: dataClient.entries.count - 1, section: 0)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
 }
